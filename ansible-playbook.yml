@@ -1,24 +1,48 @@
-- name : Configure Docker on EC2 Instances
-  hosts : all
+- name: Configure Docker on EC2 Instances
+  hosts: all
   become: true
-  connection : ssh
-  tasks : 
-  - name: updating apt
-    command : sudo apt-get update
+  connection: ssh
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
 
-  - name : Install Docker
-    command : sudo apt-get install -y docker.io
-    become : yes
-    become_user : root
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
 
-  - name : Start Docker Service
-    command : sudo systemctl start docker
-    become : yes
-    become_user : root
-  - name :Stop existing containers
-    shell: "docker stop $(docker ps -q) || true"
-    ignore_errors: yes
-  - name : delete all containers
-    shell: docker rm $(docker ps -a -q)
-  - name: Deploy Docker Container
-    command: docker run -itd -p 8085:8081 advit2012/insurance-mentor:1
+    - name: Start Docker Service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Stop existing containers
+      shell: |
+        CONTAINERS=$(docker ps -q)
+        if [ -n "$CONTAINERS" ]; then
+          docker stop $CONTAINERS
+        else
+          echo "No containers to stop."
+        fi
+      ignore_errors: yes
+
+    - name: Delete all containers
+      shell: |
+        CONTAINERS=$(docker ps -a -q)
+        if [ -n "$CONTAINERS" ]; then
+          docker rm $CONTAINERS
+        else
+          echo "No containers to remove."
+        fi
+      ignore_errors: yes
+
+    - name: Deploy Docker Container
+      docker_container:
+        name: insurance-mentor
+        image: advit2012/insurance-mentor:1
+        state: started
+        ports:
+          - "8085:8081"
