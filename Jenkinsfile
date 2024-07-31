@@ -12,17 +12,9 @@ node{
         dockerCMD = "${docker}/bin/docker"
         tagName="1.0"
         
-    stage('Code Checkout')
-       try{
+    stage('Code Checkout'){
         echo "checkout from git repo"
         git 'https://github.com/advit2012/insurance-project.git'
-        }
-       catch(Exception e){
-            echo 'Exception occured in Git Code Checkout Stage'
-            currentBuild.result = "FAILURE"
-            emailext body: '''Dear All,
-            The Jenkins job ${JOB_NAME} has been failed. Request you to please have a look at it immediately by clicking on the below link. 
-            ${BUILD_URL}''', subject: 'Job ${JOB_NAME} ${BUILD_NUMBER} is failed', to: 'manjeetsinghlpu47@gmail.com'
         }
       stage('Build the Application'){
         echo "Cleaning... Compiling...Testing... Packaging..."
