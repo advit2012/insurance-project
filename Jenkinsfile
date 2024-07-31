@@ -15,14 +15,14 @@ node{
     stage('Code Checkout')
        try{
         echo "checkout from git repo"
-        git 'https://github.com/vikulrepo/insurance-project.git'
+        git 'https://github.com/advit2012/insurance-project.git'
         }
        catch(Exception e){
             echo 'Exception occured in Git Code Checkout Stage'
             currentBuild.result = "FAILURE"
             emailext body: '''Dear All,
             The Jenkins job ${JOB_NAME} has been failed. Request you to please have a look at it immediately by clicking on the below link. 
-            ${BUILD_URL}''', subject: 'Job ${JOB_NAME} ${BUILD_NUMBER} is failed', to: 'vikul@gmail.com'
+            ${BUILD_URL}''', subject: 'Job ${JOB_NAME} ${BUILD_NUMBER} is failed', to: 'manjeetsinghlpu47@gmail.com'
         }
       stage('Build the Application'){
         echo "Cleaning... Compiling...Testing... Packaging..."
