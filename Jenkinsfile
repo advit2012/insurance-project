@@ -39,7 +39,7 @@ node {
         withCredentials([string(credentialsId: 'dockerhubpassword', variable: 'dockerhubpassword')]) {
             // Login to DockerHub with sudo
             sh '''
-                echo "${dockerhubpassword}" | sudo ${dockerCMD} login -u advit2012 --password-stdin
+                echo "${dockerhubpassword}" | sudo -S ${dockerCMD} login -u advit2012 --password-stdin
             '''
             // Push Docker image
             sh "sudo ${dockerCMD} push advit2012/insureme:${tagName}"
