@@ -15,8 +15,9 @@
     command : sudo systemctl start docker
     become : yes
     become_user : root
-  - name : stop existing containers
-    shell: docker stop $(docker ps -a -q)
+  - name :Stop existing containers
+    shell: "docker stop $(docker ps -q) || true"
+    ignore_errors: yes
   - name : delete all containers
     shell: docker rm $(docker ps -a -q)
   - name: Deploy Docker Container
