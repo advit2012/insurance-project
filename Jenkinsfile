@@ -35,13 +35,13 @@ node{
       }
       stage('Containerise the application'){
           echo "making the image out of the application"
-          sh "${dockerCMD} build -t vikuldocker/insureme:${tagName} . "
+          sh "${dockerCMD} build -t advit2012/insureme:${tagName} . "
       }
       stage('Pushing it ot the DockerHub'){
         echo 'Pushing the docker image to DockerHub'
         withCredentials([string(credentialsId: 'dockerhubpassword', variable: 'dockerhubpassword')]) {
-            sh "${dockerCMD} login -u vikuldocker -p ${dockerhubpassword}"
-            sh "${dockerCMD} push vikuldocker/insureme:${tagName}"
+            sh "${dockerCMD} login -u advit2012 -p ${dockerhubpassword}"
+            sh "${dockerCMD} push advit2012/insureme:${tagName}"
       }
 
       stage('Configure and Deploy to the test-serverusing ansible'){  
