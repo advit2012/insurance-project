@@ -34,15 +34,16 @@ node {
         sh "${dockerCMD} build -t advit2012/insureme:${tagName} ."
     }
 
-    stage('Pushing it to DockerHub') {
-        echo 'Pushing the docker image to DockerHub'
-        withCredentials([string(credentialsId: 'dockerhubpassword', variable: 'dockerhubpassword')]) {
-            // Login to DockerHub with sudo
-            sh '''
-                echo "${dockerhubpassword}" | sudo -S ${dockerCMD} login -u advit2012 --password-stdin
-            '''
-            // Push Docker image
-            sh "sudo ${dockerCMD} push advit2012/insureme:${tagName}"
+   stage('Pushing it to DockerHub') {
+    echo 'Pushing the docker image to DockerHub'
+    withCredentials([string(credentialsId: 'dockerhubpassword', variable: 'dockerhubpassword')]) {
+        // Login to DockerHub
+        sh '''
+            echo "${dockerhubpassword}" | ${dockerCMD} login -u advit2012 --password-stdin
+        '''
+        // Push Docker image
+        sh "${dockerCMD} push advit2012/insureme:${tagName}"
+    
         }
     }
 
