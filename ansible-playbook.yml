@@ -42,7 +42,7 @@
     - name: Deploy Docker Container
       docker_container:
         name: insurance-mentor
-        image: advit2012/insurance-mentor:1
+        image: advit2012/insureme:1
         state: started
         ports:
           - "8085:8081"
